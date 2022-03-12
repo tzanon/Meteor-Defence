@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class Enemy : Trackable
 {
-	
-
 	protected override void Awake()
 	{
 		_radarType = "Enemy";
 
-		_movementDirection = transform.forward;
-		_movementSpeed = 7f;
+		MovementDirection = transform.forward;
+		_movementSpeed = 6f;
 
 		base.Awake();
 	}

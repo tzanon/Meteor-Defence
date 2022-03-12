@@ -19,7 +19,6 @@ public class RadarScreen : MonoBehaviour
 	private void Awake()
 	{
 		_enemyBlips = new Dictionary<GameObject, GameObject>();
-
 		_screenRadius = transform.localScale.x / 2;
 	}
 
@@ -37,12 +36,23 @@ public class RadarScreen : MonoBehaviour
 		if (_updateCooldown <= 0f)
 		{
 			_updateCooldown = updateRate;
+			var toDelete = new List<GameObject>();
 
-			foreach (var pair in _enemyBlips)
+			foreach (var obj in _enemyBlips.Keys)
 			{
-				var obj = pair.Key;
-				var blip = pair.Value;
-				UpdateBlipPosition(obj, blip);
+				if (obj == null) // if object destroyed
+				{
+					toDelete.Add(obj);
+					continue;
+				}
+
+				UpdateBlipPosition(obj, _enemyBlips[obj]);
+			}
+
+			if (toDelete.Count > 0)
+			{
+				Debug.Log(string.Format("Removing {0} blips of destroyed objects", toDelete.Count));
+				toDelete.ForEach(obj => RemoveObjectFromScreen(obj));
 			}
 		}
 	}
@@ -66,7 +76,7 @@ public class RadarScreen : MonoBehaviour
 		Debug.Log("Added enemy to radar");
 	}
 
-	public void RemoveObject(GameObject obj)
+	public void RemoveObjectFromScreen(GameObject obj)
 	{
 		if (_enemyBlips.ContainsKey(obj))
 		{
@@ -89,8 +99,12 @@ public class RadarScreen : MonoBehaviour
 		var objPosition = obj.transform.position;
 
 		Vector3 dist = objPosition - detectorPosition;
-		float blipX = _screenRadius * dist.x / detectorRadius;
-		float blipZ = _screenRadius * dist.z / detectorRadius;
+
+		float detectorRotation = radarZone.transform.rotation.eulerAngles.y;
+		Vector3 rotatedDist = Quaternion.Euler(0f, -detectorRotation, 0f) * dist;
+
+		float blipX = _screenRadius * rotatedDist.x / detectorRadius;
+		float blipZ = _screenRadius * rotatedDist.z / detectorRadius;
 
 		blip.transform.localPosition = new Vector3(blipX, blipHeight, blipZ);
 	}
