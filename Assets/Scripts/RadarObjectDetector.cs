@@ -5,7 +5,7 @@ public class RadarObjectDetector : MonoBehaviour
 {
 	public RadarScreen screen;
 
-	private int _dummyIdx = 0;
+	private int _dummyIdx = 1;
 
 	// Start is called before the first frame update
 	void Start()
@@ -19,8 +19,9 @@ public class RadarObjectDetector : MonoBehaviour
 		{
 			var dummy = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 			dummy.AddComponent<Enemy>();
-			dummy.transform.position = new Vector3(0f, 4f, 6f);
-			dummy.name = "dummy " + _dummyIdx++;
+			dummy.transform.position = transform.position + new Vector3(6f * _dummyIdx, 2f * _dummyIdx, 10f * _dummyIdx);
+			dummy.name = "dummy " + _dummyIdx;
+			_dummyIdx++;
 
 			screen.AddObjectToScreen(dummy);
 		}
@@ -28,12 +29,18 @@ public class RadarObjectDetector : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		
+		if (other.GetComponent<Trackable>())
+		{
+			screen.AddObjectToScreen(other.gameObject);
+		}
 	}
 
 	private void OnTriggerExit(Collider other)
 	{
-		
+		if (other.GetComponent<Trackable>())
+		{
+			screen.RemoveObject(other.gameObject);
+		}
 	}
 
 	public void AddObjectToTrack()
