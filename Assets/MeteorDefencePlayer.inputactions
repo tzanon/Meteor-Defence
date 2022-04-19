@@ -824,6 +824,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ToggleCursor",
+                    "type": "Button",
+                    "id": "c8c49670-3234-4d93-8d01-fb62fe06f1b2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -870,6 +879,17 @@
                     "action": "RotateRadar",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "53cd0b01-8d05-4c49-99e0-fbeb4b04ad50",
+                    "path": "<Keyboard>/backslash",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleCursor",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

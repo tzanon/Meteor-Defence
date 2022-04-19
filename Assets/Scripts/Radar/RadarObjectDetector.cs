@@ -8,9 +8,6 @@ public class RadarObjectDetector : MonoBehaviour
 
 	public RadarScreen screen;
 
-	public GameObject dummyEnemy;
-	private int _dummyIdx = 1;
-
 	private float _rotateRate = 20f;
 	private Vector3 _rotation = Vector3.zero;
 
@@ -27,16 +24,13 @@ public class RadarObjectDetector : MonoBehaviour
 	private void Awake()
 	{
 		_controls = new MeteorDefencePlayer();
-		_controls.Debug.SpawnMeteor.performed += SpawnMeteor;
-
-		_controls.Debug.RotateRadar.started += RotateRadar;
-		_controls.Debug.RotateRadar.canceled += RotateRadar;
 	}
 
 	// Start is called before the first frame update
 	private void Start()
 	{
-		screen = GetComponentInChildren<RadarScreen>();
+		if (!screen)
+			screen = GetComponentInChildren<RadarScreen>();
 	}
 
 	private void FixedUpdate()
@@ -63,30 +57,9 @@ public class RadarObjectDetector : MonoBehaviour
 		}
 	}
 
-	private void SpawnMeteor(InputAction.CallbackContext ctx)
+	public void SetRotation(Vector3 direction)
 	{
-		var dummy = Instantiate(dummyEnemy);
-
-		float xCoord = Random.Range(-80f, 60f);
-		Vector3 startPos = new Vector3(xCoord, 10f, 120f);
-
-		dummy.transform.position = startPos;
-		//dummy.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-		dummy.name = "dummy " + _dummyIdx;
-		_dummyIdx++;
-	}
-
-	private void RotateRadar(InputAction.CallbackContext ctx)
-	{
-		if (ctx.started)
-		{
-			var direction = ctx.ReadValue<float>();
-			_rotation = new Vector3(0f, _rotateRate * direction, 0f);
-		}
-		else if (ctx.canceled)
-		{
-			_rotation = Vector3.zero;
-		}
+		_rotation = direction * _rotateRate;
 	}
 
 	public void AddObjectToTrack()

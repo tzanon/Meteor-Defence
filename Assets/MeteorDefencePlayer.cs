@@ -846,6 +846,15 @@ public partial class @MeteorDefencePlayer : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ToggleCursor"",
+                    ""type"": ""Button"",
+                    ""id"": ""c8c49670-3234-4d93-8d01-fb62fe06f1b2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -892,6 +901,17 @@ public partial class @MeteorDefencePlayer : IInputActionCollection2, IDisposable
                     ""action"": ""RotateRadar"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53cd0b01-8d05-4c49-99e0-fbeb4b04ad50"",
+                    ""path"": ""<Keyboard>/backslash"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleCursor"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -981,6 +1001,7 @@ public partial class @MeteorDefencePlayer : IInputActionCollection2, IDisposable
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_SpawnMeteor = m_Debug.FindAction("SpawnMeteor", throwIfNotFound: true);
         m_Debug_RotateRadar = m_Debug.FindAction("RotateRadar", throwIfNotFound: true);
+        m_Debug_ToggleCursor = m_Debug.FindAction("ToggleCursor", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1204,12 +1225,14 @@ public partial class @MeteorDefencePlayer : IInputActionCollection2, IDisposable
     private IDebugActions m_DebugActionsCallbackInterface;
     private readonly InputAction m_Debug_SpawnMeteor;
     private readonly InputAction m_Debug_RotateRadar;
+    private readonly InputAction m_Debug_ToggleCursor;
     public struct DebugActions
     {
         private @MeteorDefencePlayer m_Wrapper;
         public DebugActions(@MeteorDefencePlayer wrapper) { m_Wrapper = wrapper; }
         public InputAction @SpawnMeteor => m_Wrapper.m_Debug_SpawnMeteor;
         public InputAction @RotateRadar => m_Wrapper.m_Debug_RotateRadar;
+        public InputAction @ToggleCursor => m_Wrapper.m_Debug_ToggleCursor;
         public InputActionMap Get() { return m_Wrapper.m_Debug; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1225,6 +1248,9 @@ public partial class @MeteorDefencePlayer : IInputActionCollection2, IDisposable
                 @RotateRadar.started -= m_Wrapper.m_DebugActionsCallbackInterface.OnRotateRadar;
                 @RotateRadar.performed -= m_Wrapper.m_DebugActionsCallbackInterface.OnRotateRadar;
                 @RotateRadar.canceled -= m_Wrapper.m_DebugActionsCallbackInterface.OnRotateRadar;
+                @ToggleCursor.started -= m_Wrapper.m_DebugActionsCallbackInterface.OnToggleCursor;
+                @ToggleCursor.performed -= m_Wrapper.m_DebugActionsCallbackInterface.OnToggleCursor;
+                @ToggleCursor.canceled -= m_Wrapper.m_DebugActionsCallbackInterface.OnToggleCursor;
             }
             m_Wrapper.m_DebugActionsCallbackInterface = instance;
             if (instance != null)
@@ -1235,6 +1261,9 @@ public partial class @MeteorDefencePlayer : IInputActionCollection2, IDisposable
                 @RotateRadar.started += instance.OnRotateRadar;
                 @RotateRadar.performed += instance.OnRotateRadar;
                 @RotateRadar.canceled += instance.OnRotateRadar;
+                @ToggleCursor.started += instance.OnToggleCursor;
+                @ToggleCursor.performed += instance.OnToggleCursor;
+                @ToggleCursor.canceled += instance.OnToggleCursor;
             }
         }
     }
@@ -1308,5 +1337,6 @@ public partial class @MeteorDefencePlayer : IInputActionCollection2, IDisposable
     {
         void OnSpawnMeteor(InputAction.CallbackContext context);
         void OnRotateRadar(InputAction.CallbackContext context);
+        void OnToggleCursor(InputAction.CallbackContext context);
     }
 }

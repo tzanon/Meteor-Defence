@@ -14,6 +14,21 @@ public class PlayerController : MonoBehaviour
 	private float _lookSensitivity = 8f;
 	private Camera _pov;
 
+	public RadarObjectDetector radar;
+
+	public GameObject dummyEnemy;
+	private int _dummyIdx = 1;
+
+	private void OnEnable()
+	{
+		_controlMapping.Debug.Enable();
+	}
+
+	private void OnDisable()
+	{
+		_controlMapping.Debug.Disable();
+	}
+
 	private void Awake()
 	{
 		_pov = GetComponentInChildren<Camera>();
@@ -25,6 +40,19 @@ public class PlayerController : MonoBehaviour
 
 		_controlMapping = new MeteorDefencePlayer();
 		//_controlMapping.Player.Move
+
+		var x = GetComponent<PlayerInput>();
+
+		_controlMapping.Debug.SpawnMeteor.performed += SpawnMeteor;
+		_controlMapping.Debug.RotateRadar.started += RotateRadar;
+		_controlMapping.Debug.RotateRadar.canceled += RotateRadar;
+		_controlMapping.Debug.ToggleCursor.performed += ToggleCursorVisibility;
+	}
+
+	private void ToggleCursorVisibility(InputAction.CallbackContext context)
+	{
+		Debug.Log("Toggling cursor");
+		Cursor.visible = !Cursor.visible;
 	}
 
 	private void FixedUpdate()
@@ -102,6 +130,39 @@ public class PlayerController : MonoBehaviour
 	public void PrevEquipment(InputAction.CallbackContext context)
 	{
 
+	}
+
+
+	// DEBUG METHODS
+
+	private void SpawnMeteor(InputAction.CallbackContext ctx)
+	{
+		var dummy = Instantiate(dummyEnemy);
+
+		float xCoord = Random.Range(-80f, 60f);
+		Vector3 startPos = new Vector3(xCoord, 10f, 120f);
+
+		dummy.transform.position = startPos;
+		//dummy.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+		dummy.name = "dummy " + _dummyIdx;
+		_dummyIdx++;
+	}
+
+	private void RotateRadar(InputAction.CallbackContext ctx)
+	{
+		Vector3 rotationDirection;
+
+		if (ctx.started || ctx.performed)
+		{
+			var direction = ctx.ReadValue<float>();
+			rotationDirection = new Vector3(0f, direction, 0f);
+		}
+		else
+		{
+			rotationDirection = Vector3.zero;
+		}
+
+		radar.SetRotation(rotationDirection);
 	}
 
 }
