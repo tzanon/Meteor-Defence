@@ -47,12 +47,23 @@ public class PlayerController : MonoBehaviour
 		_controlMapping.Debug.RotateRadar.started += RotateRadar;
 		_controlMapping.Debug.RotateRadar.canceled += RotateRadar;
 		_controlMapping.Debug.ToggleCursor.performed += ToggleCursorVisibility;
+
+		//Cursor.lockState = CursorLockMode.Confined;
 	}
 
 	private void ToggleCursorVisibility(InputAction.CallbackContext context)
 	{
 		Debug.Log("Toggling cursor");
 		Cursor.visible = !Cursor.visible;
+		/*
+		if (Cursor.visible)
+		{
+			Cursor.lockState = CursorLockMode.None;
+		}
+		else
+		{
+			Cursor.lockState = CursorLockMode.Confined;
+		}/**/
 	}
 
 	private void FixedUpdate()
@@ -131,7 +142,6 @@ public class PlayerController : MonoBehaviour
 	{
 
 	}
-
 
 	// DEBUG METHODS
 

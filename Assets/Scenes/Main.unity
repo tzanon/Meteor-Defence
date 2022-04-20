@@ -416,7 +416,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &988790994
 Transform:
   m_ObjectHideFlags: 0
@@ -622,8 +622,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radarZone: {fileID: 1583031002}
-  blipPrefab: {fileID: 0}
-  updateRate: 1
+  blipPrefab: {fileID: 2528246806911669129, guid: 9d12b31db7805754786da50296873a7d, type: 3}
+  updateRate: 0.1
 --- !u!1 &1483408531
 GameObject:
   m_ObjectHideFlags: 0

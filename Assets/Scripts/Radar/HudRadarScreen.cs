@@ -2,25 +2,21 @@ using UnityEngine;
 
 public class HudRadarScreen : RadarScreen
 {
-	// Start is called before the first frame update
-	void Start()
+	private RectTransform _rectTransform;
+
+	protected override void Awake()
 	{
-		
+		base.Awake();
+		_rectTransform = GetComponent<RectTransform>();
+		_screenRadius = _rectTransform.rect.width / 2;
 	}
 
-	// Update is called once per frame
-	void Update()
+	protected override void InitBlipRotation(GameObject blip) { }
+
+	protected override void PlaceBlip(GameObject blip, Vector3 pos)
 	{
-		
+		var blipRectTransform = blip.GetComponent<RectTransform>();
+		blipRectTransform.anchoredPosition = new Vector2(pos.x, pos.z);
 	}
 
-	protected override void InitBlipRotation(GameObject blip)
-	{
-
-	}
-
-	protected override void UpdateBlipPosition(GameObject obj, GameObject blip)
-	{
-		
-	}
 }

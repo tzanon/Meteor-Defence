@@ -13,10 +13,9 @@ public abstract class RadarScreen : MonoBehaviour
 
 	protected float _screenRadius;
 
-	protected void Awake()
+	protected virtual void Awake()
 	{
 		_enemyBlips = new Dictionary<GameObject, GameObject>();
-		_screenRadius = transform.localScale.x / 2;
 	}
 
 	// Start is called before the first frame update
@@ -68,7 +67,6 @@ public abstract class RadarScreen : MonoBehaviour
 	{
 		var blip = Instantiate(blipPrefab, transform);
 		InitBlipRotation(blip);
-		
 
 		UpdateBlipPosition(enemy, blip);
 
@@ -94,5 +92,22 @@ public abstract class RadarScreen : MonoBehaviour
 
 	protected abstract void InitBlipRotation(GameObject blip);
 
-	protected abstract void UpdateBlipPosition(GameObject obj, GameObject blip);
+	protected void UpdateBlipPosition(GameObject obj, GameObject blip)
+	{
+		var detectorRadius = radarZone.radius;
+		var detectorPosition = radarZone.transform.position;
+		var objPosition = obj.transform.position;
+
+		Vector3 dist = objPosition - detectorPosition;
+
+		float detectorRotation = radarZone.transform.rotation.eulerAngles.y;
+		Vector3 rotatedDist = Quaternion.Euler(0f, -detectorRotation, 0f) * dist;
+
+		float blipX = _screenRadius * rotatedDist.x / detectorRadius;
+		float blipZ = _screenRadius * rotatedDist.z / detectorRadius;
+
+		PlaceBlip(blip.gameObject, new Vector3(blipX, 0f, blipZ));
+	}
+
+	protected abstract void PlaceBlip(GameObject blip, Vector3 pos);
 }
