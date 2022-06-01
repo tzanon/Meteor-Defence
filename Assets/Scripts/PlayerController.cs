@@ -113,6 +113,8 @@ public class PlayerController : MonoBehaviour
 
 	public void FireWeapon(InputAction.CallbackContext context)
 	{
+		
+		
 		if (context.performed)
 		{
 			Debug.Log("Performed firing");
