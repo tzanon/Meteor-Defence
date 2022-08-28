@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,8 +11,6 @@ public class PlayerController : MonoBehaviour
 	private float _xMouse, _yMouse;
 	private float _lookSensitivity = 8f;
 	private Camera _pov;
-
-	public RadarObjectDetector radar;
 
 	public GameObject dummyEnemy;
 	private int _dummyIdx = 1;
@@ -39,13 +35,10 @@ public class PlayerController : MonoBehaviour
 		_movementDirection = Vector3.zero;
 
 		_controlMapping = new MeteorDefencePlayer();
-		//_controlMapping.Player.Move
 
 		var x = GetComponent<PlayerInput>();
 
 		_controlMapping.Debug.SpawnMeteor.performed += SpawnMeteor;
-		_controlMapping.Debug.RotateRadar.started += RotateRadar;
-		_controlMapping.Debug.RotateRadar.canceled += RotateRadar;
 		_controlMapping.Debug.ToggleCursor.performed += ToggleCursorVisibility;
 
 		//Cursor.lockState = CursorLockMode.Confined;
@@ -135,16 +128,6 @@ public class PlayerController : MonoBehaviour
 
 	}
 
-	public void NextEquipment(InputAction.CallbackContext context)
-	{
-
-	}
-
-	public void PrevEquipment(InputAction.CallbackContext context)
-	{
-
-	}
-
 	// DEBUG METHODS
 
 	private void SpawnMeteor(InputAction.CallbackContext ctx)
@@ -159,22 +142,5 @@ public class PlayerController : MonoBehaviour
 		dummy.name = "dummy " + _dummyIdx;
 		_dummyIdx++;
 	}
-
-	private void RotateRadar(InputAction.CallbackContext ctx)
-	{
-		Vector3 rotationDirection;
-
-		if (ctx.started || ctx.performed)
-		{
-			var direction = ctx.ReadValue<float>();
-			rotationDirection = new Vector3(0f, direction, 0f);
-		}
-		else
-		{
-			rotationDirection = Vector3.zero;
-		}
-
-		radar.SetRotation(rotationDirection);
-	}
-
+	
 }
